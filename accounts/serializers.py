@@ -11,7 +11,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
         max_length=32, validators=[UniqueValidator(queryset=User.objects.all())]
     )
-    password = serializers.CharField(validators=[validators.validate_password])
+    password = serializers.CharField(write_only=True, validators=[validators.validate_password])
 
     def create(self, validated_data):
         user = User.objects.create_user(
