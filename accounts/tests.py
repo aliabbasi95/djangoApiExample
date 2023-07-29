@@ -158,3 +158,21 @@ class AccountsTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         # And check username in response data equal 1
         self.assertEqual(len(response.data['username']), 1)
+
+    def test_register_user_with_no_username(self):
+        """
+        Ensure user is not created for no username.
+        """
+        data = {
+            'username': '',
+            'email': 'foobarbaz@example.com',
+            'password': 'Somepassword1@'
+        }
+
+        response = self.client.post(self.register_url, data, format='json')
+        # We want to make sure we have one user in the database..
+        self.assertEqual(User.objects.count(), 1)
+        # And that we're returning a 400 created code.
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        # And check username in response data equal 1
+        self.assertEqual(len(response.data['username']), 1)
